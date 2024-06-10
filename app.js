@@ -198,6 +198,72 @@ app.get('/Temporary', async (req, res) => {
 
 //******************************************************************************************************************************************** */
 
+app.get('/education', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Education" }).sort({ created_date: -1 }).limit(10);
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.get('/finance', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Finance" }).sort({ created_date: -1 }).limit(10);
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.get('/tech', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Tech" }).sort({ created_date: -1 }).limit(10);
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.get('/healthcare', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Healthcare" }).sort({ created_date: -1 }).limit(10);
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.get('/construction', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Construction" }).sort({ created_date: -1 }).limit(10);
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.get('/other', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Other" }).sort({ created_date: -1 }).limit(10);
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+{/* <option value="Education">Education</option>
+<option value="Construction">Construction</option>
+<option value="Tech">Software and Technology</option>
+<option value="Finance">Finance</option>
+<option value="Healthcare">Temporary</option>
+<option value="Other">Other</option> */}
 
 
 

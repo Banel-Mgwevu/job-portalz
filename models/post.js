@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const postSchema = new mongoose.Schema({
     company: String,
     jobTitle:String,
-    category: String,
+    category: String, // sector edu
     jobType: String,  // Full time, Contract, Internship
     salaryRange: String,
     applyLink: String,
