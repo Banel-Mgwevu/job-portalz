@@ -102,6 +102,15 @@
         <%= job.jobTitle %>
        </span>
        <span class="after:content-['×'] after:ml-3 md:after:content-none">
+        <%= job.salaryRange %>
+        </span>
+
+       <div class="flex flex-wrap items-center justify-start flex-1 gap-1">
+        <a class="after:content-['•'] after:ml-1">
+          <%= job.remote ? 'Remote' : 'Office-Based' %>
+        </a>
+      </div>
+       <!-- <span class="after:content-['×'] after:ml-3 md:after:content-none">
        R<%= job.salaryRange %>
        </span>
        <div class="flex flex-wrap items-center justify-start flex-1 gap-1">
@@ -111,7 +120,7 @@
         <a href="/">
          Anywhere
         </a>
-       </div>
+       </div> -->
       </div>
       
       <span class="flex-1 text-right">

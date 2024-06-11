@@ -258,13 +258,7 @@ app.get('/other', async (req, res) => {
     }
 });
 
-{/* <option value="Education">Education</option>
-<option value="Construction">Construction</option>
-<option value="Tech">Software and Technology</option>
-<option value="Finance">Finance</option>
-<option value="Healthcare">Temporary</option>
-<option value="Other">Other</option> */}
-
+//====================================================================
 
 
 app.get('/post', async (req, res) => {
