@@ -25,17 +25,35 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 // Route for the root URL '/'
+
+//==========================For===main======page===============================================
 app.get('/', async (req, res) => {
   try {
     // Fetch the latest 10 jobs sorted by creation date in descending order
-    const jobs = await Post.find().sort({ created_date: -1 }).limit(10);
-    res.render('home', { jobs }); // Render EJS template with fetched jobs
+    const jobs = await Post.find().sort({ created_date: -1 }).limit(1);
+    res.render('all-jobs/home', { jobs }); // Render EJS template with fetched jobs
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
 
 
+app.get('/alljobs', async (req, res) => {
+    try {
+      // Fetch all jobs sorted by creation date in descending order
+      const jobs = await Post.find().sort({ created_date: -1 });
+      
+      // Render EJS template with fetched jobs
+      res.render('all-jobs/home', { jobs });
+    } catch (err) {
+      // Send a 500 status code and error message if something goes wrong
+      res.status(500).send(err.message);
+    }
+  });
+
+
+//==============================================================================================================
+//============================subscribe=========================================================================
 app.get('/sub', (req, res) => {
    
     res.render('sub');
@@ -45,6 +63,7 @@ app.post('/sub', (req, res) => {  //Get the email for the news letter
    
     
 });
+//===============================================================================================================
 
 app.get('/terms', (req, res) => {
    
@@ -55,6 +74,28 @@ app.get('/privacy', (req, res) => {
    
     res.render('privacy');
 });
+
+app.get('/jobs', async (req, res) => {
+    try {
+        // Retrieve filter parameters from the query string
+        const { category, jobType, remote } = req.query;
+
+        // Create a query object to filter jobs
+        let query = {};
+        if (category) query.category = category;
+        if (jobType) query.jobType = jobType;
+        if (remote) query.remote = remote === 'true';
+
+        // Fetch jobs based on the query object
+        const jobs = await Post.find(query).sort({ created_date: -1 });
+
+        res.render('jobs', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+
 
 // Assuming you have an Express app instance named 'app'
 app.get('/job/:id', async (req, res) => {
@@ -154,6 +195,8 @@ app.post('/subscribe', async (req, res) => {
 
 
 //FILTERS CONTRACT================================
+
+//=================================fulltime========================================================
 app.get('/FullTime', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
@@ -164,6 +207,22 @@ app.get('/FullTime', async (req, res) => {
     }
 });
 
+app.get('/All-fulltime', async (req, res) => {
+    try {
+      // Fetch all jobs with category "Full-Time" sorted by creation date in descending order
+      const jobs = await Post.find({ jobType: "Full-Time" }).sort({ created_date: -1 });
+      
+      // Render EJS template with fetched jobs
+      res.render('home', { jobs });
+    } catch (err) {
+      // Send a 500 status code and error message if something goes wrong
+      res.status(500).send(err.message);
+    }
+  });
+
+//===================================================================================================
+
+//==========================part-time===============================================================
 app.get('/Part-Time', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
@@ -174,6 +233,19 @@ app.get('/Part-Time', async (req, res) => {
     }
 });
 
+app.get('/All-Part-Time', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ jobType: "Part-Time" }).sort({ created_date: -1 }); //center and centre
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+//===================================================================================================================
+
+//================Contract===========================================================================================
 app.get('/Contract', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
@@ -184,6 +256,21 @@ app.get('/Contract', async (req, res) => {
     }
 });
 
+app.get('/All-Contract', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ jobType: "Contract" }).sort({ created_date: -1 });
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+//=============================================================================================================
+
+
+
+//================Temporary======================================================================================
 app.get('/Temporary', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
@@ -194,6 +281,45 @@ app.get('/Temporary', async (req, res) => {
     }
 });
 
+
+
+app.get('/All-Temporary', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ jobType: "Temporary" }).sort({ created_date: -1 });
+        res.render('home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+//============================================================================================================
+
+
+app.get('/remote-jobs', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ remote: true }).sort({ created_date: -1 }).limit(10);
+        res.render('remote/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+
+app.get('/all-remote-jobs', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ remote: true }).sort({ created_date: -1 });
+        res.render('remote/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+
+
+
 //FILTER CONTRACT
 
 //******************************************************************************************************************************************** */
@@ -202,64 +328,137 @@ app.get('/education', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ category: "Education" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('education/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
 
+
+app.get('/all-education', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Education" }).sort({ created_date: -1 });
+        res.render('education/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+//===========================================================================================================
+
+//=====================finance=============================================================================
 app.get('/finance', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ category: "Finance" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('finance/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
 
+
+
+app.get('/all-finance', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Finance" }).sort({ created_date: -1 });
+        res.render('finance/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+//===============tech============================================================================
 app.get('/tech', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ category: "Tech" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('tech/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
 
-app.get('/healthcare', async (req, res) => {
+app.get('/all-tech', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
-        const jobs = await Post.find({ category: "Healthcare" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        const jobs = await Post.find({ category: "Tech" }).sort({ created_date: -1 }).limit(10);
+        res.render('tech/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
+
+//================healthcare====================================================================
+app.get('/healthcare', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Healthcare" }).sort({ created_date: -1 }).limit(10);
+        res.render('healthcare/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+
+app.get('/all-healthcare', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Healthcare" }).sort({ created_date: -1 }).limit(10);
+        res.render('healthcare/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+//=================================================================================================================
 
 app.get('/construction', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ category: "Construction" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('construction/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
 
+app.get('/all-construction', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Construction" }).sort({ created_date: -1 }).limit(10);
+        res.render('construction/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+
+//===========================================other======================================================
 app.get('/other', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ category: "Other" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('other/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
 
-//====================================================================
+app.get('/all-other', async (req, res) => {
+    try {
+        // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
+        const jobs = await Post.find({ category: "Other" }).sort({ created_date: -1 });
+        res.render('other/home', { jobs }); // Render EJS template with fetched jobs
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
+
+//====================================================================
 
 app.get('/post', async (req, res) => {
    
