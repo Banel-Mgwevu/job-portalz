@@ -312,6 +312,39 @@
     <link href="/build/_shared/chunk-RK5MPVK2.js" rel="modulepreload"/>
     <link href="/build/_shared/chunk-GXQGTQCX.js" rel="modulepreload"/>
     <link href="/build/routes/hire._index-GSYOEVMH.js" rel="modulepreload"/>
+    
+    <script>
+      async function applyForJob(jobId) {
+          try {
+              const response = await fetch(`/apply/${jobId}`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              });
+
+              if (!response.ok) {
+                  throw new Error('Network response was not ok ' + response.statusText);
+              }
+
+              const data = await response.json();
+              if (data.applyLink) {
+                  window.location.href = data.applyLink; // Open the URL
+              } else {
+                  alert('Apply link not found.');
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              alert('Failed to apply for the job.');
+          }
+      }
+
+      function onApplyButtonClick() {
+          const jobId = '60c72b2f4f1a462d88d1dafe'; // Replace with actual job ID
+          applyForJob(jobId);
+      }
+  </script>
+    
     <script>
      window.__remixContext = {"url":"/hire","state":{"loaderData":{"root":{"ENV":{"JOB_STARTING_PRICE":"29","JOB_HIGHLIGHT_PRICE":"9","JOB_LOGO_PRICE":"9","JOB_PIN_1_PRICE":"9","JOB_PIN_7_PRICE":"19","JOB_PIN_30_PRICE":"29"}},"routes/hire._index":null},"actionData":null,"errors":null},"future":{"v3_fetcherPersist":false,"v3_relativeSplatPath":false,"v3_throwAbortReason":false}};
     </script>

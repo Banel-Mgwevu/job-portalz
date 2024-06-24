@@ -30,7 +30,7 @@ app.set('view engine', 'ejs');
 app.get('/', async (req, res) => {
   try {
     // Fetch the latest 10 jobs sorted by creation date in descending order
-    const jobs = await Post.find().sort({ created_date: -1 }).limit(1);
+    const jobs = await Post.find().sort({ created_date: 1 }).limit(1);
     res.render('all-jobs/home', { jobs }); // Render EJS template with fetched jobs
   } catch (err) {
     res.status(500).send(err.message);
@@ -111,11 +111,33 @@ app.get('/job/:id', async (req, res) => {
       }
   
       // Render the 'jobs' template with the job data
-      res.render('jobs', { job });
+      res.render('jobs', { jobId,job });
     } catch (err) {
       res.status(500).send(err.message);
     }
   });
+
+  app.post('/apply/:id', async (req, res) => {
+    try {
+        // Extract the ID from the request parameters
+        const jobId = req.params.id;
+
+        // Find the job post by ID
+        const job = await Post.findById(jobId);
+
+        // Check if the job post exists
+        if (!job) {
+            return res.status(404).send('Job post not found');
+        }
+
+        // Send a JSON response with the applyLink
+        res.json({ applyLink: job.applyLink });
+    } catch (error) {
+        // Handle any errors
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});  
 
   
 app.get('/post', (req, res) => {  //https://chatgpt.com/share/08ebf041-dcb5-4f14-be54-099b3a633597
@@ -250,7 +272,7 @@ app.get('/Contract', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ jobType: "Contract" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('contract/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -260,7 +282,7 @@ app.get('/All-Contract', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ jobType: "Contract" }).sort({ created_date: -1 });
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('contract/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -275,7 +297,7 @@ app.get('/Temporary', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ jobType: "Temporary" }).sort({ created_date: -1 }).limit(10);
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('temporary/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -287,7 +309,7 @@ app.get('/All-Temporary', async (req, res) => {
     try {
         // Fetch the latest 10 jobs with category "main" sorted by creation date in descending order
         const jobs = await Post.find({ jobType: "Temporary" }).sort({ created_date: -1 });
-        res.render('home', { jobs }); // Render EJS template with fetched jobs
+        res.render('temporary/home', { jobs }); // Render EJS template with fetched jobs
     } catch (err) {
         res.status(500).send(err.message);
     }

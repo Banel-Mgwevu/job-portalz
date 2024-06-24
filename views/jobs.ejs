@@ -132,7 +132,7 @@
       </span>
       
      </div><br><br>
-     <a class="py-4 px-6 text-white bg-primaryColor border-0 text-lg font-bold rounded-md" href="https://grnh.se/fda447ff5us" target="_blank">
+     <a class="py-4 px-6 text-white bg-primaryColor border-0 text-lg font-bold rounded-md" id="applyButton" data-job-id="<%= jobId %>" target="_blank">
       Apply for this job
      </a>
 
@@ -193,7 +193,7 @@
     <div class="flex justify-between items-center gap-28 md:flex-col md:gap-8">
      <div>
       
-      <a class="py-4 px-6 text-white bg-primaryColor border-0 text-lg font-bold rounded-md" href="https://grnh.se/fda447ff5us" target="_blank">
+      <a class="py-4 px-6 text-white bg-primaryColor border-0 text-lg font-bold rounded-md" id="applyButton" data-job-id="<%= jobId %>" target="_blank">
        Apply for this job
       </a>
 
@@ -331,5 +331,37 @@ import("/build/entry.client-EUCYMYWT.js");
   <script>
    window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-ZV1G2CQ17D');
   </script>
+
+<script>
+  document.getElementById('applyButton').addEventListener('click', async function () {
+      const jobId = this.getAttribute('data-job-id');
+
+      try {
+          const response = await fetch(`/apply/${jobId}`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+          const applyLink = data.applyLink;
+
+          if (applyLink) {
+              window.open(applyLink, '_blank');
+          } else {
+              alert('Apply link not found.');
+          }
+      } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred while trying to fetch the apply link.');
+      }
+  });
+</script>
+
  </body>
 </html>
